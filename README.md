@@ -173,7 +173,7 @@ La base de datos incluye datos de ejemplo con:
 
 ## Autor
 
-Proyecto desarrollado como parte del curso de Desarrollo de Aplicaciones Web.
+Proyecto desarrollado por Hugo Mocholi Antequera y Sonia Traver Casero
 
 ## Licencia
 
