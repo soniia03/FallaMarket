@@ -26,15 +26,15 @@ import { HttpClientModule } from '@angular/common/http';
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" routerLink="/products" routerLinkActive="active">
+              <a class="nav-link" routerLink="/trajes" routerLinkActive="active">
                 <i class="fas fa-tshirt me-1"></i>
-                Productos
+                Trajes
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" routerLink="/products/add" routerLinkActive="active">
+              <a class="nav-link" routerLink="/trajes/add" routerLinkActive="active">
                 <i class="fas fa-plus me-1"></i>
-                Vender
+                Añadir
               </a>
             </li>
             <li class="nav-item">

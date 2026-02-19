@@ -1,20 +1,20 @@
-export interface Product {
+// Interfaz principal para los trajes basada en el modelo del backend
+export interface Traje {
   _id?: string;
-  name: string;
-  description: string;
-  price: number;
-  category: 'traje-fallero' | 'traje-fallera' | 'complementos' | 'calzado' | 'accesorios';
-  condition: 'nuevo' | 'usado' | 'reservado' | 'vendido';
-  seller: string | User;
-  images: string[];
-  available: boolean;
+  nombre: string;
+  material: string;
+  propietario: string;
   createdAt?: string;
   updatedAt?: string;
-  categoryFormatted?: string;
-  conditionFormatted?: string;
-  priceFormatted?: string;
 }
 
+// Interfaz para las respuestas del backend
+export interface BackendResponse<T> {
+  status: T | string;
+  data?: T;
+}
+
+// Interfaz para usuario (mantenida para compatibilidad futura)
 export interface User {
   _id?: string;
   name: string;
@@ -28,6 +28,7 @@ export interface User {
   daysSinceRegistration?: number;
 }
 
+// Interfaz para respuestas API generales
 export interface ApiResponse<T> {
   success: boolean;
   data?: T;
@@ -37,14 +38,16 @@ export interface ApiResponse<T> {
   errors?: string[];
 }
 
-export interface CategoryInfo {
+// Información de materiales comunes para trajes
+export interface MaterialInfo {
   key: string;
   label: string;
   icon: string;
   color: string;
 }
 
-export interface ConditionInfo {
+// Estados o tipos de trajes
+export interface TipoTrajeInfo {
   key: string;
   label: string;
   class: string;
