@@ -75,15 +75,16 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\": \"Raya y el último dragón\",\n    \"year\": 2021,\n    \"director\": \"Don Hall\",\n    \"plot\": \"Raya busca al último dragón para unir a los reinos fragmentados de Kumandra.\",\n    \"genres\": [\"Fantasía\", \"Animación\", \"Acción\"],\n    \"poster\": \"https://m.media-amazon.com/images/I/51fR0VZKJGL._AC_.jpg\",\n    \"imdb\": { \"rating\": 7.3, \"votes\": 180000 }\n  }",
+					"raw": "{\n    \"nombre\": \"Traje de astronauta\",\n    \"material\": \"Nylon\",\n    \"propietario\": \"Neil Armstrong\"}",
 					"options": {
 						"raw": {
 							"language": "json"
+
 						}
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/v1/trajes/añadir",
+					"raw": "http://localhost:3000/api/v1/trajes/anadir",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -93,7 +94,7 @@
 						"api",
 						"v1",
 						"trajes",
-						"añadir"
+						"anadir"
 					]
 				},
 				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
@@ -101,7 +102,7 @@
 			"response": []
 		},
 		{
-			"name": "Update Movie",
+			"name": "actualizar traje",
 			"event": [
 				{
 					"listen": "test",
@@ -131,7 +132,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/v1/movies/6964be8e8e9a1f5271abe9d0",
+					"raw": "http://localhost:3000/api/v1/trajes/editar",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -140,8 +141,8 @@
 					"path": [
 						"api",
 						"v1",
-						"movies",
-						"6964be8e8e9a1f5271abe9d0"
+						"trajes",
+						"editar"
 					]
 				},
 				"description": "This is a PUT request and it is used to overwrite an existing piece of data. For instance, after you create an entity with a POST request, you may want to modify that later. You can do that using a PUT request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful PUT request typically returns a `200 OK`, `201 Created`, or `204 No Content` response code."

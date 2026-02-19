@@ -15,6 +15,8 @@ app.use(express.json());
 app.use('/api/v1/trajes', require('./routes/traje.route'));
 app.use('/', (req, res) => res.send('API is in /api/v1/trajes/'));
 
+
+
 //Settings
 app.set('port', process.env.PORT || 3000);
 //iniciar el server

@@ -5,8 +5,8 @@ const router = express.Router();
 
 router.get('/', trajeCtrl.getTrajes);
 router.get('/traje/:id', trajeCtrl.getTraje);
-router.post('/añadir', trajeCtrl.addTraje);
-router.put('/:id', trajeCtrl.updateTraje);
+router.post('/anadir', trajeCtrl.addTraje);
+router.put('/editar/:id', trajeCtrl.updateTraje);
 router.delete('/:id', trajeCtrl.deleteTraje);
 
 module.exports = router;
