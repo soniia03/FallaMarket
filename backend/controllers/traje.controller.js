@@ -1,27 +1,44 @@
 const Traje = require('../models/traje.model');
+const mongoose = require('mongoose');
 const trajeCtrl = {};
 
 //Funciones CRUD
 
-// Obtener todas los trajes 
+// Obtener todas los trajes FUNCIONA
 trajeCtrl.getTrajes = async (req, res) => {
     const trajes = await Traje.find()
         .then((data)=>res.status(200).json({status:data}))
         .catch((err)=>res.status(400).json({status:err}));
 };
 
-// Obtener un traje por su ID
+// Obtener un traje por su ID  FUNCIONA 
 trajeCtrl.getTraje = async (req, res) => {
-    const traje = await Traje.findById(req.params.id)
-        .then(data=>
-        {
-            if(data!=null) res.status(200).json({status:data});
-            else res.status(404).json({status:'No se ha encontrado el traje'})
-        })
-        .catch((err)=>res.status(400).json({status:err}));
+    // Obtener el id de la URL
+    const { id } = req.params;
+
+    // Verificar que el id exista
+    if (!id) {
+        return res.status(400).json({ status: 'El campo id no puede estar vacio' });
+    }
+
+    // Validar que sea un ObjectId válido de MongoDB
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ status: 'Traje no encontrado' });
+    }
+
+    try {
+        const data = await Traje.findById(id);
+        if (!data) {
+            // no existía ningún documento con ese id
+            return res.status(404).json({ status: 'Traje no encontrado' });
+        }
+        return res.status(200).json({ status: 'Traje encontrado correctamente', data });
+    } catch (err) {
+        return res.status(400).json({ status: err });
+    }
 };
 
-// Agregar un nuevo traje
+// Agregar un nuevo traje   FUNCIONA 
 trajeCtrl.addTraje = async (req, res) => {
     const { nombre, material, propietario } = req.body;
     if (!nombre || !material || !propietario) {
@@ -38,26 +55,35 @@ trajeCtrl.addTraje = async (req, res) => {
     }
 };
 
-// Actualizar un traje
+// Actualizar un traje  FUNCIONA 
 trajeCtrl.updateTraje = async (req, res) => {
-    // desestructuramos los campos esperados en el body
-    const { id, nombre, material, propietario } = req.body;
+    // Obtener el id de la URL
+    const { id } = req.params;
 
-    // id en el body es obligatorio
+    // Verificar que el id exista
     if (!id) {
-        return res.status(400).json({ status: 'El campo id no puede estar vacio' });
+        return res.status(400).json({ status: 'El campo _id no puede estar vacio' });
     }
 
-    // opcional: podríamos comparar con req.params.id, pero utilizaremos el id del body
+    // Validar que sea un ObjectId válido de MongoDB
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ status: 'Traje no encontrado' });
+    }
+
+    // Desestructuramos los campos esperados en el body
+    const { nombre, material, propietario } = req.body;
+
+    // Verificar que los campos requeridos estén presentes
+    if (!nombre || !material || !propietario) {
+        return res.status(400).json({ status: 'Faltan campos: nombre, material o propietario' });
+    }
+
     const update = { nombre, material, propietario, updatedAt: Date.now() };
     try {
-
-        console.log(data);
-      const data = await Traje.findByIdAndUpdate(id, update, { new: true });
+        const data = await Traje.findByIdAndUpdate(id, update, { new: true });
         if (!data) {
             // no existía ningún documento con ese id
-            // devolver 400 según la petición
-            return res.status(400).json({ status: 'Traje no encontrado' });
+            return res.status(404).json({ status: 'Traje no encontrado' });
         }
         return res.status(200).json({ status: 'Traje actualizado correctamente', data });
     } catch (err) {
@@ -65,14 +91,31 @@ trajeCtrl.updateTraje = async (req, res) => {
     }
 };
 
-// Eliminar un traje
+// Eliminar un traje FUNCIONA
 trajeCtrl.deleteTraje = async (req, res) => {
-    await Traje.findByIdAndDelete(req.params.id)
-        .then((data)=> {
-            if(data)res.status(200).json({status:'Traje eliminada correctamente'});
-            else res.status(404).json({status:'No se ha encontrado el traje'})
-        })
-        .catch((err)=>res.status(400).json({status:err}));
+    // Obtener el id de la URL
+    const { id } = req.params;
+
+    // Verificar que el id exista
+    if (!id) {
+        return res.status(400).json({ status: 'El campo id no puede estar vacio' });
+    }
+
+    // Validar que sea un ObjectId válido de MongoDB
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ status: 'Traje no encontrado' });
+    }
+
+    try {
+        const data = await Traje.findByIdAndDelete(id);
+        if (!data) {
+            // no existía ningún documento con ese id
+            return res.status(404).json({ status: 'Traje no encontrado' });
+        }
+        return res.status(200).json({ status: 'Traje eliminado correctamente' });
+    } catch (err) {
+        return res.status(400).json({ status: err });
+    }
 };
 
 module.exports = trajeCtrl;
