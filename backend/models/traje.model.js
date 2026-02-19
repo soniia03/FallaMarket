@@ -6,10 +6,7 @@ const trajesSchema = new Schema({
         nombre: {type: String, required: true},
         material: {type: String, required: true},
         propietario: {type: String, required: true},
-        imdb:{
-            rating: {type: Number, required: true},
-            votes: {type: Number, required: true},
-        }
+       
     },
     {versionKey: false}
     );

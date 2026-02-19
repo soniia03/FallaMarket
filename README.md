@@ -24,21 +24,14 @@ La comunidad fallera necesita una plataforma especializada donde puedan:
 
 ## Entidades del Sistema
 
-### 1. Productos (products)
+### 1. Trajes (Traje)
 Representa los trajes falleros y accesorios disponibles en el marketplace.
 
 **Campos:**
 - `_id`: ObjectId - Identificador único
-- `name`: String - Nombre del producto (ej: "Traje Fallero Siglo XVIII")
-- `description`: String - Descripción detallada del producto
-- `price`: Number - Precio en euros (debe ser mayor a 0)
-- `category`: String - Categoría del producto
-- `condition`: String - Estado del producto
-- `seller`: ObjectId - Referencia al usuario vendedor
-- `images`: [String] - URLs de las imágenes del producto
-- `available`: Boolean - Disponibilidad del producto
-- `createdAt`: Date - Fecha de creación
-- `updatedAt`: Date - Fecha de última actualización
+- `nombre`: String - Nombre del producto (ej: "Traje Fallero Siglo XVIII")
+- `material`: String - Material de cual esta compuesto el traje (ej: "Lana de color azul")
+- `propietario`: String - Nombre del propietraio (ej: "Hugo")
 
 **Categorías válidas:**
 - `traje-fallero`: Trajes masculinos tradicionales
@@ -53,7 +46,7 @@ Representa los trajes falleros y accesorios disponibles en el marketplace.
 - `reservado`: Producto apartado para compra
 - `vendido`: Producto ya vendido
 
-### 2. Usuarios (users)
+
 Representa a los compradores y vendedores de la plataforma.
 
 **Campos:**
