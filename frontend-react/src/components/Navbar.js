@@ -38,29 +38,20 @@ const Navbar = () => {
             </li>
             <li className="nav-item">
               <Link 
-                className={`nav-link ${isActive('/products') ? 'active' : ''}`} 
-                to="/products"
+                className={`nav-link ${isActive('/trajes') ? 'active' : ''}`} 
+                to="/trajes"
               >
                 <i className="fas fa-tshirt me-1"></i>
-                Productos
+                Trajes
               </Link>
             </li>
             <li className="nav-item">
               <Link 
-                className={`nav-link ${isActive('/products/add') ? 'active' : ''}`} 
-                to="/products/add"
+                className={`nav-link ${isActive('/trajes/add') ? 'active' : ''}`} 
+                to="/trajes/add"
               >
                 <i className="fas fa-plus me-1"></i>
-                Vender
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link 
-                className={`nav-link ${isActive('/users') ? 'active' : ''}`} 
-                to="/users"
-              >
-                <i className="fas fa-users me-1"></i>
-                Usuarios
+                Añadir Traje
               </Link>
             </li>
           </ul>

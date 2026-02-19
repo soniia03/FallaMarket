@@ -1,72 +1,54 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useProducts } from '../hooks/useProducts';
-import { useUsers } from '../hooks/useUsers';
+import { useTrajes } from '../hooks/useTrajes';
 
 const Home = () => {
-  const { products, loading: productsLoading } = useProducts();
-  const { users, loading: usersLoading } = useUsers();
-  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const { trajes, loading: trajesLoading } = useTrajes();
+  const [featuredTrajes, setFeaturedTrajes] = useState([]);
   const [stats, setStats] = useState({
-    totalProducts: 0,
-    totalUsers: 0,
-    accessoriesCount: 0
+    totalTrajes: 0,
+    materialesUnicos: 0,
+    propietariosUnicos: 0
   });
 
-  const categories = [
-    { key: 'traje-fallero', label: 'Traje Fallero', icon: 'fas fa-male', color: 'primary' },
-    { key: 'traje-fallera', label: 'Traje Fallera', icon: 'fas fa-female', color: 'info' },
-    { key: 'complementos', label: 'Complementos', icon: 'fas fa-scarf', color: 'warning' },
-    { key: 'calzado', label: 'Calzado', icon: 'fas fa-shoe-prints', color: 'success' },
-    { key: 'accesorios', label: 'Accesorios', icon: 'fas fa-gem', color: 'danger' }
+  const materiales = [
+    { key: 'Seda', label: 'Seda', icon: 'fas fa-gem', color: 'primary' },
+    { key: 'Terciopelo', label: 'Terciopelo', icon: 'fas fa-crown', color: 'info' },
+    { key: 'Raso', label: 'Raso', icon: 'fas fa-star', color: 'warning' },
+    { key: 'Brocado', label: 'Brocado', icon: 'fas fa-award', color: 'success' },
+    { key: 'Lentejuela', label: 'Lentejuela', icon: 'fas fa-sparkles', color: 'danger' }
   ];
 
   useEffect(() => {
-    if (products && products.length > 0) {
+    if (trajes && trajes.length > 0) {
       // Calcular estadísticas
+      const materialesUnicos = [...new Set(trajes.map(t => t.material))].length;
+      const propietariosUnicos = [...new Set(trajes.map(t => t.propietario))].length;
+      
       setStats({
-        totalProducts: products.length,
-        totalUsers: users.length,
-        accessoriesCount: products.filter(p => 
-          p.category === 'accesorios' || p.category === 'complementos'
-        ).length
+        totalTrajes: trajes.length,
+        materialesUnicos,
+        propietariosUnicos
       });
 
-      // Obtener productos destacados (4 más recientes disponibles)
-      const featured = products
-        .filter(p => p.available && p.condition !== 'vendido')
+      // Obtener trajes destacados (4 más recientes)
+      const featured = trajes
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
         .slice(0, 4);
-      setFeaturedProducts(featured);
+      setFeaturedTrajes(featured);
     }
-  }, [products, users]);
+  }, [trajes]);
 
-  const getCategoryCount = (categoryKey) => {
-    return featuredProducts.filter(p => p.category === categoryKey).length;
+  const getMaterialCount = (materialKey) => {
+    return featuredTrajes.filter(t => t.material === materialKey).length;
   };
 
-  const getCategoryColor = (category) => {
-    const categoryMap = {
-      'traje-fallero': 'primary',
-      'traje-fallera': 'info',
-      'complementos': 'warning',
-      'calzado': 'success',
-      'accesorios': 'danger'
-    };
-    return categoryMap[category] || 'secondary';
-  };
-
-  const getConditionClass = (condition) => {
-    const conditionMap = {
-      'nuevo': 'bg-success',
-      'usado': 'bg-warning text-dark',
-      'reservado': 'bg-info',
-      'vendido': 'bg-secondary'
-    };
-    return conditionMap[condition] || 'bg-secondary';
-  };
-
-  const formatPrice = (price) => {
-    return `${price.toFixed(2)}€`;
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString('es-ES', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
   };
 
   return (
@@ -84,13 +66,13 @@ const Home = () => {
               Encuentra y vende piezas únicas para las fallas de Valencia.
             </p>
             <div className="d-flex gap-3">
-              <Link to="/products" className="btn btn-warning btn-lg">
+              <Link to="/trajes" className="btn btn-warning btn-lg">
                 <i className="fas fa-tshirt me-2"></i>
-                Ver Productos
+                Ver Trajes
               </Link>
-              <Link to="/products/add" className="btn btn-outline-light btn-lg">
+              <Link to="/trajes/add" className="btn btn-outline-light btn-lg">
                 <i className="fas fa-plus me-2"></i>
-                Vender
+                Añadir Traje
               </Link>
             </div>
           </div>
@@ -106,104 +88,110 @@ const Home = () => {
           <div className="card h-100 text-center">
             <div className="card-body">
               <i className="fas fa-tshirt fa-3x text-primary mb-3"></i>
-              <h5 className="card-title">Trajes Tradicionales</h5>
+              <h5 className="card-title">Trajes Registrados</h5>
               <p className="card-text">
-                Encuentra trajes falleros auténticos de diferentes épocas y estilos.
+                Encuentra trajes falleros auténticos de diferentes materiales y estilos.
               </p>
-              <div className="text-primary fw-bold fs-4">{stats.totalProducts}</div>
-              <small className="text-muted">productos disponibles</small>
+              <div className="text-primary fw-bold fs-4">{stats.totalTrajes}</div>
+              <small className="text-muted">trajes disponibles</small>
             </div>
           </div>
         </div>
         <div className="col-md-4">
           <div className="card h-100 text-center">
             <div className="card-body">
-              <i className="fas fa-users fa-3x text-success mb-3"></i>
-              <h5 className="card-title">Comunidad Fallera</h5>
+              <i className="fas fa-fabric fa-3x text-success mb-3"></i>
+              <h5 className="card-title">Materiales Únicos</h5>
               <p className="card-text">
-                Conecta con falleros de toda Valencia para comprar y vender.
+                Variedad de materiales tradicionales para trajes falleros.
               </p>
-              <div className="text-success fw-bold fs-4">{stats.totalUsers}</div>
-              <small className="text-muted">usuarios registrados</small>
+              <div className="text-success fw-bold fs-4">{stats.materialesUnicos}</div>
+              <small className="text-muted">tipos de materiales</small>
             </div>
           </div>
         </div>
         <div className="col-md-4">
           <div className="card h-100 text-center">
             <div className="card-body">
-              <i className="fas fa-gem fa-3x text-warning mb-3"></i>
-              <h5 className="card-title">Accesorios Únicos</h5>
+              <i className="fas fa-users fa-3x text-warning mb-3"></i>
+              <h5 className="card-title">Propietarios</h5>
               <p className="card-text">
-                Complementos artesanales y piezas especiales para tu traje.
+                Comunidad de falleros que comparten sus trajes registrados.
               </p>
-              <div className="text-warning fw-bold fs-4">{stats.accessoriesCount}</div>
-              <small className="text-muted">accesorios únicos</small>
+              <div className="text-warning fw-bold fs-4">{stats.propietariosUnicos}</div>
+              <small className="text-muted">propietarios diferentes</small>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Categorías */}
-      <h2 className="mb-4">Categorías Principales</h2>
+      {/* Materiales Principales */}
+      <h2 className="mb-4">Materiales Principales</h2>
       <div className="row mb-5">
-        {categories.map((category) => (
-          <div key={category.key} className="col-md-6 col-lg-3 mb-3">
-            <Link 
-              to={`/products?category=${category.key}`}
-              className="text-decoration-none"
-            >
-              <div className="card category-card h-100 border-0 shadow-sm">
-                <div className="card-body text-center p-4">
-                  <i 
-                    className={`${category.icon} fa-3x mb-3 text-${category.color}`}
-                  ></i>
-                  <h5 className="card-title">{category.label}</h5>
-                  <div className={`fw-bold text-${category.color}`}>
-                    {getCategoryCount(category.key)}
-                  </div>
-                  <small className="text-muted">productos</small>
+        {materiales.map((material) => (
+          <div key={material.key} className="col-md-6 col-lg-3 mb-3">
+            <div className="card category-card h-100 border-0 shadow-sm">
+              <div className="card-body text-center p-4">
+                <i 
+                  className={`${material.icon} fa-3x mb-3 text-${material.color}`}
+                ></i>
+                <h5 className="card-title">{material.label}</h5>
+                <div className={`fw-bold text-${material.color}`}>
+                  {getMaterialCount(material.key)}
                 </div>
+                <small className="text-muted">trajes</small>
               </div>
-            </Link>
+            </div>
           </div>
         ))}
       </div>
 
-      {/* Productos Destacados */}
-      <h2 className="mb-4">Productos Destacados</h2>
-      {featuredProducts.length > 0 ? (
+      {/* Trajes Destacados */}
+      <h2 className="mb-4">Trajes Recientes</h2>
+      {featuredTrajes.length > 0 ? (
         <div className="row">
-          {featuredProducts.map((product) => (
-            <div key={product._id} className="col-md-6 col-lg-3 mb-4">
-              <div className="card product-card h-100">
-                <div className="position-relative">
-                  <img 
-                    src={product.images && product.images[0] ? product.images[0] : '/assets/images/no-image.jpg'}
-                    className="card-img-top product-image"
-                    alt={product.name}
-                  />
-                  <span className={`badge position-absolute top-0 end-0 m-2 ${getConditionClass(product.condition)}`}>
-                    {product.condition}
-                  </span>
-                </div>
+          {featuredTrajes.map((traje) => (
+            <div key={traje._id} className="col-md-6 col-lg-3 mb-4">
+              <div className="card h-100 shadow-sm border-0">
                 <div className="card-body d-flex flex-column">
-                  <h6 className="card-title">{product.name}</h6>
-                  <p className="card-text text-muted small">
-                    {product.description.length > 80 
-                      ? `${product.description.slice(0, 80)}...` 
-                      : product.description}
-                  </p>
+                  <div className="text-center mb-3">
+                    <i className="fas fa-tshirt fa-3x text-primary"></i>
+                  </div>
+                  
+                  <h6 className="card-title text-center fw-bold">
+                    {traje.nombre}
+                  </h6>
+                  
                   <div className="mt-auto">
-                    <div className="d-flex justify-content-between align-items-center">
-                      <span className="price-tag">{formatPrice(product.price)}</span>
-                      <span className={`badge bg-${getCategoryColor(product.category)}`}>
-                        {product.category}
+                    <div className="mb-2">
+                      <small className="text-muted">Material:</small>
+                      <br />
+                      <span className="badge bg-info text-dark">
+                        {traje.material}
                       </span>
                     </div>
+                    
+                    <div className="mb-3">
+                      <small className="text-muted">Propietario:</small>
+                      <br />
+                      <span className="badge bg-success">
+                        {traje.propietario}
+                      </span>
+                    </div>
+                    
+                    <div className="mb-3">
+                      <small className="text-muted">Añadido:</small>
+                      <br />
+                      <small className="text-secondary">
+                        {formatDate(traje.createdAt)}
+                      </small>
+                    </div>
+                    
                     <Link 
-                      to={`/products/${product._id}`}
-                      className="btn btn-primary btn-sm mt-2 w-100"
+                      to={`/trajes/${traje._id}`}
+                      className="btn btn-primary btn-sm w-100"
                     >
+                      <i className="fas fa-eye me-1"></i>
                       Ver Detalles
                     </Link>
                   </div>
@@ -214,7 +202,7 @@ const Home = () => {
         </div>
       ) : (
         <div className="alert alert-info" role="alert">
-          {productsLoading ? (
+          {trajesLoading ? (
             <div className="text-center">
               <div className="spinner-border text-primary" role="status">
                 <span className="visually-hidden">Cargando...</span>
@@ -223,7 +211,7 @@ const Home = () => {
           ) : (
             <>
               <i className="fas fa-info-circle me-2"></i>
-              No hay productos destacados disponibles en este momento.
+              No hay trajes registrados en este momento. ¡Añade el primer traje fallero!
             </>
           )}
         </div>

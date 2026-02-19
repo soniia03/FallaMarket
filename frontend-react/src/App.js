@@ -6,10 +6,9 @@ import './App.css';
 // Importar componentes
 import Navbar from './components/Navbar';
 import Home from './components/Home';
-import ProductList from './components/ProductList';
-import ProductDetail from './components/ProductDetail';
-import ProductForm from './components/ProductForm';
-import UserList from './components/UserList';
+import TrajeList from './components/TrajeList';
+import TrajeDetail from './components/TrajeDetail';
+import TrajeForm from './components/TrajeForm';
 import Footer from './components/Footer';
 
 function App() {
@@ -21,11 +20,10 @@ function App() {
         <main className="container mt-4 flex-grow-1">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/products" element={<ProductList />} />
-            <Route path="/products/add" element={<ProductForm />} />
-            <Route path="/products/edit/:id" element={<ProductForm />} />
-            <Route path="/products/:id" element={<ProductDetail />} />
-            <Route path="/users" element={<UserList />} />
+            <Route path="/trajes" element={<TrajeList />} />
+            <Route path="/trajes/add" element={<TrajeForm />} />
+            <Route path="/trajes/edit/:id" element={<TrajeForm />} />
+            <Route path="/trajes/:id" element={<TrajeDetail />} />
             <Route path="*" element={
               <div className="text-center py-5">
                 <h2>Página no encontrada</h2>

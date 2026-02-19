@@ -48,6 +48,51 @@ body {
   color: white;
 }
 
+/* Estilos específicos para trajes */
+.traje-card {
+  transition: all 0.3s ease;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.traje-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.material-badge {
+  background: linear-gradient(135deg, var(--info-color), var(--primary-color));
+  color: white;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+}
+
+.propietario-badge {
+  background: linear-gradient(135deg, var(--success-color), #218838);
+  color: white;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+}
+
+/* Hero section */
+.hero-section {
+  background: linear-gradient(135deg, var(--primary-color), var(--fallero-orange));
+  border-radius: 1rem;
+}
+
+/* Categorías de materiales */
+.category-card {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
 /* Tarjetas de productos */
 .product-card {
   transition: all 0.3s ease;
