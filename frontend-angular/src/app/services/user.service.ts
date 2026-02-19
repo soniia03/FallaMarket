@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { User, ApiResponse, Product } from '../models/interfaces';
+import { User, ApiResponse, Traje } from '../models/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -46,9 +46,9 @@ export class UserService {
     return this.http.get<ApiResponse<User>>(`${this.apiUrl}/email/${encodeURIComponent(email)}`);
   }
 
-  // Obtener productos de un usuario
-  getUserProducts(id: string): Observable<ApiResponse<Product[]>> {
-    return this.http.get<ApiResponse<Product[]>>(`${this.apiUrl}/products/${id}`);
+  // Obtener trajes de un usuario
+  getUserProducts(id: string): Observable<ApiResponse<Traje[]>> {
+    return this.http.get<ApiResponse<Traje[]>>(`${this.apiUrl}/products/${id}`);
   }
 
   // Desactivar usuario
