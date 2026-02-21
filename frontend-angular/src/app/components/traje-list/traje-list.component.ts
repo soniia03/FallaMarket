@@ -89,10 +89,27 @@ import { Traje, MaterialInfo } from '../../models/interfaces';
           
           <div class="card-body d-flex flex-column">
             <h6 class="card-title">{{ traje.nombre }}</h6>
-            <p class="card-text text-muted small flex-grow-1">
+            <p class="card-text text-muted small">
               <strong>Material:</strong> {{ getMaterialLabel(traje.material) }}<br>
-              <strong>Propietario:</strong> {{ traje.propietario }}
+              <strong>Propietario:</strong> {{ traje.propietario }}<br>
+              <strong>Precio:</strong> <span class="text-success fw-bold">{{ traje.precio | currency:'EUR':'symbol':'1.2-2' }}</span>
             </p>
+            
+            <!-- Descripción -->
+            <p class="card-text small text-muted flex-grow-1">
+              <i class="fas fa-file-alt me-1"></i>
+              {{ traje.descripcion }}
+            </p>
+            
+            <!-- Estado de disponibilidad -->
+            <div class="mb-2">
+              <span *ngIf="traje.disponible" class="badge bg-success">
+                <i class="fas fa-check me-1"></i>Disponible
+              </span>
+              <span *ngIf="!traje.disponible" class="badge bg-danger">
+                <i class="fas fa-times me-1"></i>No disponible
+              </span>
+            </div>
             
             <div class="mt-auto">
               <div class="d-flex justify-content-between align-items-center mb-2">

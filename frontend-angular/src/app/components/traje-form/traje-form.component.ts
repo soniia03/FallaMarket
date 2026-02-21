@@ -109,6 +109,72 @@ import { Traje, MaterialInfo } from '../../models/interfaces';
                 </div>
               </div>
 
+              <!-- Descripción -->
+              <div class="mb-3">
+                <label for="descripcion" class="form-label">
+                  Descripción *
+                </label>
+                <textarea id="descripcion"
+                          class="form-control"
+                          formControlName="descripcion"
+                          rows="3"
+                          placeholder="Describe el traje, sus características, historia, etc."
+                          [class.is-invalid]="trajeForm.get('descripcion')?.invalid && trajeForm.get('descripcion')?.touched"></textarea>
+                <div class="invalid-feedback" 
+                     *ngIf="trajeForm.get('descripcion')?.invalid && trajeForm.get('descripcion')?.touched">
+                  <div *ngIf="trajeForm.get('descripcion')?.errors?.['required']">
+                    La descripción es obligatoria
+                  </div>
+                  <div *ngIf="trajeForm.get('descripcion')?.errors?.['minlength']">
+                    La descripción debe tener al menos 10 caracteres
+                  </div>
+                  <div *ngIf="trajeForm.get('descripcion')?.errors?.['maxlength']">
+                    La descripción no puede superar los 1000 caracteres
+                  </div>
+                </div>
+              </div>
+
+              <!-- Precio -->
+              <div class="mb-3">
+                <label for="precio" class="form-label">
+                  Precio (€) *
+                </label>
+                <div class="input-group">
+                  <span class="input-group-text">€</span>
+                  <input type="number" 
+                         id="precio"
+                         class="form-control"
+                         formControlName="precio"
+                         placeholder="0.00"
+                         step="0.01"
+                         min="0"
+                         [class.is-invalid]="trajeForm.get('precio')?.invalid && trajeForm.get('precio')?.touched">
+                </div>
+                <div class="invalid-feedback d-block" 
+                     *ngIf="trajeForm.get('precio')?.invalid && trajeForm.get('precio')?.touched">
+                  <div *ngIf="trajeForm.get('precio')?.errors?.['required']">
+                    El precio es obligatorio
+                  </div>
+                  <div *ngIf="trajeForm.get('precio')?.errors?.['min']">
+                    El precio no puede ser negativo
+                  </div>
+                </div>
+              </div>
+
+              <!-- Disponibilidad -->
+              <div class="mb-3">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" 
+                         type="checkbox" 
+                         id="disponible"
+                         formControlName="disponible">
+                  <label class="form-check-label" for="disponible">
+                    <strong>Disponible</strong>
+                    <small class="text-muted d-block">Marca si el traje está disponible para compra o intercambio</small>
+                  </label>
+                </div>
+              </div>
+
               <!-- Información adicional (solo visual) -->
               <div class="alert alert-info" *ngIf="isEditMode">
                 <h6><i class="fas fa-info-circle me-2"></i>Información del registro</h6>
@@ -234,7 +300,17 @@ export class TrajeFormComponent implements OnInit {
         Validators.required, 
         Validators.minLength(2),
         Validators.maxLength(100)
-      ]]
+      ]],
+      descripcion: ['', [
+        Validators.required,
+        Validators.minLength(10),
+        Validators.maxLength(1000)
+      ]],
+      precio: ['', [
+        Validators.required,
+        Validators.min(0)
+      ]],
+      disponible: [true]
     });
   }
 
@@ -271,7 +347,10 @@ export class TrajeFormComponent implements OnInit {
             this.trajeForm.patchValue({
               nombre: traje.nombre,
               material: material?.key || traje.material,
-              propietario: traje.propietario
+              propietario: traje.propietario,
+              descripcion: traje.descripcion,
+              precio: traje.precio,
+              disponible: traje.disponible
             });
           } else {
             // Material personalizado
@@ -280,7 +359,10 @@ export class TrajeFormComponent implements OnInit {
               nombre: traje.nombre,
               material: 'custom',
               customMaterial: traje.material,
-              propietario: traje.propietario
+              propietario: traje.propietario,
+              descripcion: traje.descripcion,
+              precio: traje.precio,
+              disponible: traje.disponible
             });
           }
         }
@@ -322,7 +404,10 @@ export class TrajeFormComponent implements OnInit {
       const trajeData: Omit<Traje, '_id' | 'createdAt' | 'updatedAt'> = {
         nombre: formData.nombre.trim(),
         material: finalMaterial,
-        propietario: formData.propietario.trim()
+        propietario: formData.propietario.trim(),
+        descripcion: formData.descripcion.trim(),
+        precio: parseFloat(formData.precio),
+        disponible: formData.disponible
       };
 
       if (this.isEditMode) {

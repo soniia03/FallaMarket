@@ -4,6 +4,9 @@ export interface Traje {
   nombre: string;
   material: string;
   propietario: string;
+  descripcion: string;
+  precio: number;
+  disponible: boolean;
   createdAt?: string;
   updatedAt?: string;
 }

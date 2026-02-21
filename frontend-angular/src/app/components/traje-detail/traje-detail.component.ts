@@ -63,7 +63,42 @@ import { Traje, MaterialInfo } from '../../models/interfaces';
               </div>
             </div>
 
-            <!-- Información de fechas -->
+            <!-- Descripción -->
+            <div class="row mb-3">
+              <div class="col-sm-4">
+                <strong>Descripción:</strong>
+              </div>
+              <div class="col-sm-8">
+                <i class="fas fa-file-alt me-2 text-muted"></i>
+                <span>{{ traje.descripcion }}</span>
+              </div>
+            </div>
+
+            <!-- Precio -->
+            <div class="row mb-3">
+              <div class="col-sm-4">
+                <strong>Precio:</strong>
+              </div>
+              <div class="col-sm-8">
+                <i class="fas fa-euro-sign me-2 text-success"></i>
+                <span class="text-success fw-bold fs-5">{{ traje.precio | currency:'EUR':'symbol':'1.2-2' }}</span>
+              </div>
+            </div>
+
+            <!-- Disponibilidad -->
+            <div class="row mb-3">
+              <div class="col-sm-4">
+                <strong>Disponibilidad:</strong>
+              </div>
+              <div class="col-sm-8">
+                <span *ngIf="traje.disponible" class="badge bg-success">
+                  <i class="fas fa-check me-1"></i>Disponible
+                </span>
+                <span *ngIf="!traje.disponible" class="badge bg-danger">
+                  <i class="fas fa-times me-1"></i>No disponible
+                </span>
+              </div>
+            </div>
             <div class="row mb-3" *ngIf="traje.createdAt">
               <div class="col-sm-4">
                 <strong>Registrado:</strong>
