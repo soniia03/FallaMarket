@@ -40,13 +40,19 @@ trajeCtrl.getTraje = async (req, res) => {
 
 // Agregar un nuevo traje   FUNCIONA 
 trajeCtrl.addTraje = async (req, res) => {
-    const { nombre, material, propietario } = req.body;
-    if (!nombre || !material || !propietario) {
-        return res.status(400).json({status: 'Faltan campos: nombre, material o propietario'});
+    const { nombre, material, propietario, descripcion, precio, disponible } = req.body;
+    if (!nombre || !material || !propietario || !descripcion || !precio || !disponible) {
+        return res.status(400).json({status: 'Faltan campos: nombre, material, propietario, descripcion, precio o disponible'});
     }
 
-    const traje = new Traje({ nombre, material, propietario });
     try {
+        // Verificar si ya existe un traje con el mismo nombre
+        const trajeExistente = await Traje.findOne({ nombre });
+        if (trajeExistente) {
+            return res.status(400).json({status: 'Ya existe un traje con ese nombre'});
+        }
+
+        const traje = new Traje({ nombre, material, propietario, descripcion, precio, disponible });
         const saved = await traje.save();
         // enviamos el documento completo; incluirá createdAt/updatedAt automáticamente
         return res.status(200).json({status: 'Traje agregado correctamente', data: saved});
