@@ -66,3 +66,4 @@ typings/
 
 # Vercel
 .vercel
+.env*.local
