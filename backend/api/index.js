@@ -14,10 +14,7 @@ let dbConnected = false;
     const mongoose = require('mongoose');
     const URI = process.env.DATABASE_URI || 'mongodb+srv://FallerosMarket:SoniaYHugo@cluster0.ezgcchu.mongodb.net/Fallerosmarkey?appName=Cluster0';
     
-    await mongoose.connect(URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(URI);
     
     dbConnected = true;
     console.log('Database connected successfully');
