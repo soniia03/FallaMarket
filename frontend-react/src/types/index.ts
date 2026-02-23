@@ -5,6 +5,7 @@ export interface Traje {
   propietario: string;
   descripcion?: string;
   precio?: number;
+  disponible: boolean;
   imagen?: string;
   createdAt: string;
   updatedAt: string;
@@ -16,6 +17,7 @@ export interface TrajeFormData {
   propietario: string;
   descripcion?: string;
   precio?: number;
+  disponible: boolean;
   imagen?: string;
 }
 

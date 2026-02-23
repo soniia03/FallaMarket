@@ -3,18 +3,20 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTrajes } from '../hooks/useTrajes';
 import { Traje } from '../types';
 
+
 const TrajeDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { getTrajeById, deleteTraje } = useTrajes();
-  
+ 
   const [traje, setTraje] = useState<Traje | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
 
+
   useEffect(() => {
     if (!id) return;
-    
+   
     const fetchTraje = async (): Promise<void> => {
       try {
         setLoading(true);
@@ -29,8 +31,10 @@ const TrajeDetail: React.FC = () => {
       }
     };
 
+
     fetchTraje();
   }, [id, getTrajeById]);
+
 
   const handleDelete = async (): Promise<void> => {
     if (traje && window.confirm(`¿Estás seguro de que quieres eliminar el traje "${traje.nombre}"?`)) {
@@ -45,6 +49,7 @@ const TrajeDetail: React.FC = () => {
     }
   };
 
+
   const formatDate = (dateString: string): string => {
     return new Date(dateString).toLocaleDateString('es-ES', {
       weekday: 'long',
@@ -55,6 +60,7 @@ const TrajeDetail: React.FC = () => {
       minute: '2-digit'
     });
   };
+
 
   const getMaterialIcon = (material: string): string => {
     const materialIcons: Record<string, string> = {
@@ -71,6 +77,7 @@ const TrajeDetail: React.FC = () => {
     return materialIcons[material] || 'fas fa-fabric';
   };
 
+
   if (loading) {
     return (
       <div className="text-center py-5">
@@ -81,6 +88,7 @@ const TrajeDetail: React.FC = () => {
       </div>
     );
   }
+
 
   if (error) {
     return (
@@ -94,6 +102,7 @@ const TrajeDetail: React.FC = () => {
     );
   }
 
+
   if (!traje) {
     return (
       <div className="text-center py-5">
@@ -106,6 +115,7 @@ const TrajeDetail: React.FC = () => {
       </div>
     );
   }
+
 
   return (
     <div>
@@ -122,6 +132,7 @@ const TrajeDetail: React.FC = () => {
           </li>
         </ol>
       </nav>
+
 
       <div className="row">
         {/* Información principal del traje */}
@@ -165,6 +176,46 @@ const TrajeDetail: React.FC = () => {
                 </div>
               </div>
 
+
+              {/* Descripción */}
+              <div className="mb-4 p-3 bg-light rounded">
+                <h5 className="text-muted mb-3">
+                  <i className="fas fa-pen me-2 text-secondary"></i>
+                  Descripción
+                </h5>
+                <p className="text-dark" style={{ whiteSpace: 'pre-wrap' }}>
+                  {traje.descripcion}
+                </p>
+              </div>
+
+
+              {/* Precio y Disponibilidad */}
+              <div className="row mb-4">
+                <div className="col-md-6">
+                  <h5 className="text-muted mb-2">
+                    <i className="fas fa-euro-sign me-2 text-warning"></i>
+                    Precio
+                  </h5>
+                  <p className="h3 text-warning">
+                    <span className="badge bg-warning text-dark p-3 rounded-3">
+                      €{traje.precio.toFixed(2)}
+                    </span>
+                  </p>
+                </div>
+                <div className="col-md-6">
+                  <h5 className="text-muted mb-2">
+                    <i className={`fas ${traje.disponible ? 'fa-check-circle me-2 text-success' : 'fa-times-circle me-2 text-danger'}`}></i>
+                    Estado de Disponibilidad
+                  </h5>
+                  <p className="h4">
+                    <span className={`badge ${traje.disponible ? 'bg-success' : 'bg-danger'} p-3 rounded-3`}>
+                      {traje.disponible ? '✓ Disponible' : '✗ No disponible'}
+                    </span>
+                  </p>
+                </div>
+              </div>
+
+
               {/* Metadatos */}
               <div className="border-top pt-4">
                 <h5 className="text-muted mb-3">
@@ -187,7 +238,7 @@ const TrajeDetail: React.FC = () => {
                       <div>
                         <strong>Última actualización:</strong><br />
                         <small>
-                          {traje.updatedAt !== traje.createdAt 
+                          {traje.updatedAt !== traje.createdAt
                             ? formatDate(traje.updatedAt)
                             : 'No modificado'
                           }
@@ -201,6 +252,7 @@ const TrajeDetail: React.FC = () => {
           </div>
         </div>
 
+
         {/* Panel de acciones */}
         <div className="col-lg-4">
           <div className="card border-0 shadow">
@@ -212,34 +264,34 @@ const TrajeDetail: React.FC = () => {
             </div>
             <div className="card-body">
               <div className="d-grid gap-2">
-                <Link 
-                  to={`/trajes/edit/${traje.id}`} 
+                <Link
+                  to={`/trajes/edit/${traje.id}`}
                   className="btn btn-warning btn-lg"
                 >
                   <i className="fas fa-edit me-2"></i>
                   Editar Traje
                 </Link>
-                
-                <button 
-                  className="btn btn-danger btn-lg" 
+               
+                <button
+                  className="btn btn-danger btn-lg"
                   onClick={handleDelete}
                 >
                   <i className="fas fa-trash me-2"></i>
                   Eliminar Traje
                 </button>
-                
+               
                 <hr className="my-3" />
-                
-                <Link 
-                  to="/trajes" 
+               
+                <Link
+                  to="/trajes"
                   className="btn btn-outline-secondary"
                 >
                   <i className="fas fa-arrow-left me-2"></i>
                   Volver a la lista
                 </Link>
-                
-                <Link 
-                  to="/trajes/add" 
+               
+                <Link
+                  to="/trajes/add"
                   className="btn btn-outline-primary"
                 >
                   <i className="fas fa-plus me-2"></i>
@@ -248,6 +300,7 @@ const TrajeDetail: React.FC = () => {
               </div>
             </div>
           </div>
+
 
           {/* Información adicional */}
           <div className="card border-0 shadow mt-4">
@@ -259,7 +312,7 @@ const TrajeDetail: React.FC = () => {
             </div>
             <div className="card-body">
               <p className="small text-muted mb-2">
-                <strong>Los trajes falleros</strong> son parte del patrimonio cultural valenciano. 
+                <strong>Los trajes falleros</strong> son parte del patrimonio cultural valenciano.
                 Cada uno tiene sus propias características según el material y la tradición.
               </p>
               <p className="small text-muted mb-0">
@@ -272,5 +325,6 @@ const TrajeDetail: React.FC = () => {
     </div>
   );
 };
+
 
 export default TrajeDetail;

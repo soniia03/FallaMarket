@@ -3,20 +3,27 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useTrajes } from '../hooks/useTrajes';
 import { TrajeFormData } from '../types';
 
+
 const TrajeForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { createTraje, updateTraje, getTrajeById } = useTrajes();
   const isEdit = Boolean(id);
 
+
   const [formData, setFormData] = useState<TrajeFormData>({
     nombre: '',
     material: '',
-    propietario: ''
+    propietario: '',
+    descripcion: '',
+    precio: 0,
+    disponible: true
   });
+
 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+
 
   useEffect(() => {
     if (isEdit && id) {
@@ -28,7 +35,10 @@ const TrajeForm: React.FC = () => {
             setFormData({
               nombre: traje.nombre,
               material: traje.material,
-              propietario: traje.propietario
+              propietario: traje.propietario,
+              descripcion: traje.descripcion,
+              precio: traje.precio,
+              disponible: traje.disponible
             });
           }
         } catch (err) {
@@ -41,23 +51,45 @@ const TrajeForm: React.FC = () => {
     }
   }, [id, isEdit, getTrajeById]);
 
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    const { name, value, type } = e.target;
+   
+    if (type === 'checkbox') {
+      const checkbox = e.target as HTMLInputElement;
+      setFormData(prev => ({
+        ...prev,
+        [name]: checkbox.checked
+      }));
+    } else if (type === 'number') {
+      setFormData(prev => ({
+        ...prev,
+        [name]: parseFloat(value)
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
+
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setError('');
-    
+   
     // Validaciones básicas
-    if (!formData.nombre || !formData.material || !formData.propietario) {
-      setError('Todos los campos son obligatorios.');
+    if (!formData.nombre || !formData.material || !formData.propietario || !formData.descripcion) {
+      setError('Todos los campos principales son obligatorios.');
       return;
     }
+   
+    if (formData.precio < 0) {
+      setError('El precio no puede ser negativo.');
+      return;
+    }
+
 
     try {
       setLoading(true);
@@ -74,6 +106,7 @@ const TrajeForm: React.FC = () => {
     }
   };
 
+
   const materialesComunes: string[] = [
     'Seda',
     'Terciopelo',
@@ -86,6 +119,7 @@ const TrajeForm: React.FC = () => {
     'Gasa',
     'Otro'
   ];
+
 
   return (
     <div className="row justify-content-center">
@@ -104,6 +138,7 @@ const TrajeForm: React.FC = () => {
                 {error}
               </div>
             )}
+
 
             <form onSubmit={handleSubmit}>
               {/* Nombre del traje */}
@@ -126,6 +161,7 @@ const TrajeForm: React.FC = () => {
                   Introduce un nombre descriptivo para el traje.
                 </div>
               </div>
+
 
               {/* Material */}
               <div className="mb-4">
@@ -151,7 +187,7 @@ const TrajeForm: React.FC = () => {
                 <div className="form-text">
                   O puedes escribir directamente si seleccionas "Otro".
                 </div>
-                
+               
                 {/* Campo de texto para "Otro" material */}
                 {formData.material === 'Otro' && (
                   <input
@@ -164,6 +200,7 @@ const TrajeForm: React.FC = () => {
                   />
                 )}
               </div>
+
 
               {/* Propietario */}
               <div className="mb-4">
@@ -185,6 +222,75 @@ const TrajeForm: React.FC = () => {
                   Nombre de la persona propietaria del traje.
                 </div>
               </div>
+
+
+              {/* Descripción */}
+              <div className="mb-4">
+                <label htmlFor="descripcion" className="form-label fw-bold">
+                  <i className="fas fa-pen me-2 text-secondary"></i>
+                  Descripción *
+                </label>
+                <textarea
+                  className="form-control form-control-lg"
+                  id="descripcion"
+                  name="descripcion"
+                  value={formData.descripcion}
+                  onChange={(e) => setFormData(prev => ({ ...prev, descripcion: e.target.value }))}
+                  placeholder="Describe los detalles del traje, características especiales, etc."
+                  rows={4}
+                  required
+                />
+                <div className="form-text">
+                  Proporciona una descripción detallada del traje.
+                </div>
+              </div>
+
+
+              {/* Precio */}
+              <div className="mb-4">
+                <label htmlFor="precio" className="form-label fw-bold">
+                  <i className="fas fa-euro-sign me-2 text-warning"></i>
+                  Precio *
+                </label>
+                <input
+                  type="number"
+                  className="form-control form-control-lg"
+                  id="precio"
+                  name="precio"
+                  value={formData.precio}
+                  onChange={handleChange}
+                  placeholder="0.00"
+                  step="0.01"
+                  min="0"
+                  required
+                />
+                <div className="form-text">
+                  Introduce el precio estimado del traje en euros.
+                </div>
+              </div>
+
+
+              {/* Disponible */}
+              <div className="mb-4">
+                <div className="form-check form-switch">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    id="disponible"
+                    name="disponible"
+                    checked={formData.disponible}
+                    onChange={handleChange}
+                  />
+                  <label className="form-check-label fw-bold" htmlFor="disponible">
+                    <i className="fas fa-check-circle me-2 text-success"></i>
+                    Disponible
+                  </label>
+                </div>
+                <div className="form-text">
+                  Marca si el traje está disponible o no.
+                </div>
+              </div>
+
 
               {/* Botones */}
               <div className="d-flex gap-3 pt-3 border-top">
@@ -221,6 +327,7 @@ const TrajeForm: React.FC = () => {
           </div>
         </div>
 
+
         {/* Información adicional */}
         <div className="mt-4">
           <div className="card bg-light border-0">
@@ -230,8 +337,8 @@ const TrajeForm: React.FC = () => {
                 Información sobre Trajes Falleros
               </h6>
               <p className="card-text small text-muted mb-0">
-                Los trajes falleros son una parte fundamental de la tradición valenciana. 
-                Asegúrate de incluir información precisa sobre el material y propietario 
+                Los trajes falleros son una parte fundamental de la tradición valenciana.
+                Asegúrate de incluir información precisa sobre el material y propietario
                 para facilitar su identificación y cuidado.
               </p>
             </div>
@@ -241,5 +348,6 @@ const TrajeForm: React.FC = () => {
     </div>
   );
 };
+
 
 export default TrajeForm;

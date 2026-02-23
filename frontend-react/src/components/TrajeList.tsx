@@ -3,15 +3,18 @@ import { Link } from 'react-router-dom';
 import { useTrajes } from '../hooks/useTrajes';
 import { Traje } from '../types';
 
+
 const TrajeList: React.FC = () => {
   const { trajes, loading, error, deleteTraje } = useTrajes();
   const [searchTerm, setSearchTerm] = useState<string>('');
 
-  const filteredTrajes = trajes.filter(traje => 
+
+  const filteredTrajes = trajes.filter(traje =>
     traje.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
     traje.material.toLowerCase().includes(searchTerm.toLowerCase()) ||
     traje.propietario.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
 
   const handleDelete = async (id: string, nombre: string): Promise<void> => {
     if (window.confirm(`¿Estás seguro de que quieres eliminar el traje "${nombre}"?`)) {
@@ -23,6 +26,7 @@ const TrajeList: React.FC = () => {
     }
   };
 
+
   const formatDate = (dateString: string): string => {
     return new Date(dateString).toLocaleDateString('es-ES', {
       year: 'numeric',
@@ -30,6 +34,7 @@ const TrajeList: React.FC = () => {
       day: 'numeric'
     });
   };
+
 
   if (loading) {
     return (
@@ -42,6 +47,7 @@ const TrajeList: React.FC = () => {
     );
   }
 
+
   if (error) {
     return (
       <div className="alert alert-danger" role="alert">
@@ -50,6 +56,7 @@ const TrajeList: React.FC = () => {
       </div>
     );
   }
+
 
   return (
     <div>
@@ -63,6 +70,7 @@ const TrajeList: React.FC = () => {
           <i className="fas fa-plus me-2"></i>Agregar Traje
         </Link>
       </div>
+
 
       {/* Buscador */}
       <div className="row mb-4">
@@ -81,6 +89,7 @@ const TrajeList: React.FC = () => {
           </div>
         </div>
       </div>
+
 
       {/* Lista de trajes */}
       {filteredTrajes.length === 0 ? (
@@ -104,8 +113,8 @@ const TrajeList: React.FC = () => {
                       {traje.nombre}
                     </h5>
                     <div className="dropdown">
-                      <button className="btn btn-outline-secondary btn-sm dropdown-toggle" 
-                              type="button" 
+                      <button className="btn btn-outline-secondary btn-sm dropdown-toggle"
+                              type="button"
                               data-bs-toggle="dropdown">
                         <i className="fas fa-ellipsis-v"></i>
                       </button>
@@ -122,8 +131,8 @@ const TrajeList: React.FC = () => {
                         </li>
                         <li><hr className="dropdown-divider" /></li>
                         <li>
-                          <button 
-                            className="dropdown-item text-danger" 
+                          <button
+                            className="dropdown-item text-danger"
                             onClick={() => handleDelete(traje.id, traje.nombre)}
                           >
                             <i className="fas fa-trash me-2"></i>Eliminar
@@ -132,6 +141,7 @@ const TrajeList: React.FC = () => {
                       </ul>
                     </div>
                   </div>
+
 
                   <div className="row mb-3">
                     <div className="col-sm-6">
@@ -153,6 +163,41 @@ const TrajeList: React.FC = () => {
                       </p>
                     </div>
                   </div>
+
+
+                  {/* Descripción */}
+                  <div className="mb-3">
+                    <small className="text-muted">Descripción:</small>
+                    <p className="mb-2 text-dark">
+                      {traje.descripcion.length > 100
+                        ? `${traje.descripcion.substring(0, 100)}...`
+                        : traje.descripcion}
+                    </p>
+                  </div>
+
+
+                  {/* Precio y Disponibilidad */}
+                  <div className="row mb-3">
+                    <div className="col-sm-6">
+                      <small className="text-muted">Precio:</small>
+                      <p className="mb-2">
+                        <span className="badge bg-warning text-dark">
+                          <i className="fas fa-euro-sign me-1"></i>
+                          {traje.precio.toFixed(2)}
+                        </span>
+                      </p>
+                    </div>
+                    <div className="col-sm-6">
+                      <small className="text-muted">Estado:</small>
+                      <p className="mb-2">
+                        <span className={`badge ${traje.disponible ? 'bg-success' : 'bg-danger'}`}>
+                          <i className={`fas ${traje.disponible ? 'fa-check-circle' : 'fa-times-circle'} me-1`}></i>
+                          {traje.disponible ? 'Disponible' : 'No disponible'}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+
 
                   <div className="text-muted small">
                     <div className="d-flex justify-content-between">
@@ -187,5 +232,6 @@ const TrajeList: React.FC = () => {
     </div>
   );
 };
+
 
 export default TrajeList;
