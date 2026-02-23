@@ -169,9 +169,9 @@ const TrajeList: React.FC = () => {
                   <div className="mb-3">
                     <small className="text-muted">Descripción:</small>
                     <p className="mb-2 text-dark">
-                      {traje.descripcion.length > 100
+                      {traje.descripcion && traje.descripcion.length > 100
                         ? `${traje.descripcion.substring(0, 100)}...`
-                        : traje.descripcion}
+                        : traje.descripcion || 'Sin descripción'}
                     </p>
                   </div>
 
@@ -183,7 +183,7 @@ const TrajeList: React.FC = () => {
                       <p className="mb-2">
                         <span className="badge bg-warning text-dark">
                           <i className="fas fa-euro-sign me-1"></i>
-                          {traje.precio.toFixed(2)}
+                          {traje.precio?.toFixed(2) || '0.00'}
                         </span>
                       </p>
                     </div>

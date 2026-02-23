@@ -198,7 +198,7 @@ const TrajeDetail: React.FC = () => {
                   </h5>
                   <p className="h3 text-warning">
                     <span className="badge bg-warning text-dark p-3 rounded-3">
-                      €{traje.precio.toFixed(2)}
+                      €{traje.precio?.toFixed(2) || '0.00'}
                     </span>
                   </p>
                 </div>

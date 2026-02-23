@@ -85,7 +85,7 @@ const TrajeForm: React.FC = () => {
       return;
     }
    
-    if (formData.precio < 0) {
+    if (formData.precio !== undefined && formData.precio < 0) {
       setError('El precio no puede ser negativo.');
       return;
     }
