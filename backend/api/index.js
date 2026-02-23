@@ -4,13 +4,22 @@ const cors = require('cors');
 const morgan = require('morgan');
 const app = express();
 
-// Inicializar conexión a la base de datos
-require('../database');
-
 // Middlewares
 app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());
+
+// Inicializar conexión a la base de datos de forma asíncrona (no-bloqueante)
+// Esto permite que Vercel inicie el servidor sin esperar a la BD
+(async () => {
+  try {
+    require('../database');
+    console.log('Database connection initialized');
+  } catch (err) {
+    console.error('Database connection error:', err);
+    // Continúa funcionando incluso si la BD no conecta (importante para Vercel)
+  }
+})();
 
 // Routes
 // Vercel mounts functions under the `/api` prefix, so the incoming path
